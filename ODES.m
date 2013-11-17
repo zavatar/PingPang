@@ -1,0 +1,19 @@
+function prime = ODES(t,f,p)
+A = p(1);
+B = p(2:4);
+C = p(5);
+E = p(6);
+
+u = f(4);
+v = f(5);
+w = f(6);
+% dx = u;
+% dy = v;
+% dz = w;
+% A * du =  B(2)*w - B(3)*v - C * u*u;
+% A * dv =  B(3)*u - B(1)*w - C * v*v;
+% A * dw =  B(1)*v - B(2)*u - C * w*w + E;
+du = (B(2)*w - B(3)*v - C*u*u) / A;
+dv = (B(3)*u - B(1)*w - C*v*v) / A;
+dw = (B(1)*v - B(2)*u - C*w*w + E) / A;
+prime=[u; v; w; du; dv; dw];
