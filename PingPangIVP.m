@@ -1,4 +1,4 @@
-function PingPang(V, Theta, Phi, Omega)
+function [time T] = PingPangIVP(V, Theta, Phi, Omega)
 
 theta = Theta*pi/180;
 phi = Phi*pi/180;
@@ -32,3 +32,5 @@ ylabel('横向位移(m)')
 zlabel('垂直位移(m)')
 grid on;
 axis([0 5 -3 3 -0.15 0.4])
+time = lz*0.01;
+T = [f(lz,1) f(lz,2) f(lz,3)];
