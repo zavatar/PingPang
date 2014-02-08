@@ -1,15 +1,12 @@
-function [V0 V1] = PingPangBVP(Pos0, Pos1, Omega, time, flag)
+function [f H] = PingPangBVP(Pos0, Pos1, Omega, time, p)
 
-if nargin==4
-	flag = 1;
-end
+M = p(1);
+D = p(2);
+Rho = p(3);
+Cd = p(4);
+g = p(5);
+itv = p(6);
 
-M = 0.0027;
-D = 0.04;
-Rho = 1.205;
-Cd = 0.2;
-g = 9.8;
-itv = 0.01;
 time = time + itv/2;
 
 C2 = pi*Rho*D*D;
@@ -27,10 +24,6 @@ p = [M+Ma/2, C3*Omega/8, C2*Cd/8, (Ma-M)*g, B0];
 sol = bvpinit(tspan, F0);
 sol = bvp4c(@ODES, @BC, sol, [], p);
 f = deval(sol, tspan)';
-lz = find(f(:,3)>0, 1, 'last');
-if flag == 1
-    plot3(f(1:lz,1), f(1:lz,2), f(1:lz,3), 'o', ...
-    'Color', rand(1,3), 'LineWidth', 2, 'MarkerSize', 7);
-end
-V0 = [f(1,4), f(1,5), f(1,6)];
-V1 = [f(lz,4), f(lz,5), f(lz,6)];
+xl = find(f(:,1)<0, 1, 'last');
+xr = find(f(:,1)>0, 1, 'first');
+H = f(xl,3) + abs(f(xl,1))*(f(xr,3)-f(xl,3))/(f(xr,1)-f(xl,1));
